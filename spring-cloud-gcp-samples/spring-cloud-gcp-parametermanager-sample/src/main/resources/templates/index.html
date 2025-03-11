@@ -1,4 +1,4 @@
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
 
 <style>
     html * {
@@ -40,7 +40,7 @@
 <h1>Parameter Manager Demo with Spring Cloud GCP</h1>
 
 <div class="panel">
-    <h2>Create, Read, Update Parameters</h2>
+    <h2>Create, Read, Update and Delete Parameters</h2>
 
     <p>
         Using the form below, you can create/update parameters in Parameter Manager, read and delete them.
@@ -80,13 +80,42 @@
                 <li>Parameter ID: <input name="parameterId" type="text"/></li>
                 <li>Version ID: <input name="versionId" type="text"/></li>
                 <li>Parameter Payload: <input name="parameterPayload" type="text"/></li>
-                <!--                <li>Parameter Payload: <input type="text" name="secretPayload"/></li>-->
                 <li>Project ID (optional): <input name="projectId" type="text"/></li>
                 <li>Location ID (optional): <input name="locationId" type="text"/></li>
                 <li><input type="submit" value="Create/Update Parameter"/></li>
             </ol>
         </form>
+    </div>
 
+    <div class="panel highlight">
+        <h3>Delete Parameter</h3>
+        <p>
+            This will delete a parameter if the provided parameter ID exist.
+        </p>
+        <form action="/deleteParameter" method="POST">
+            <ol>
+                <li>Parameter ID: <input name="parameterId" type="text"/></li>
+                <li>Project ID (optional): <input name="projectId" type="text"/></li>
+                <li>Location ID (optional): <input name="locationId" type="text"/></li>
+                <li><input type="submit" value="Delete Parameter"/></li>
+            </ol>
+        </form>
+    </div>
+
+    <div class="panel highlight">
+        <h3>Delete Parameter Version</h3>
+        <p>
+            This will delete a parameter if the provided version ID exist in given parameter.
+        </p>
+        <form action="/deleteParameterVersion" method="POST">
+            <ol>
+                <li>Parameter ID: <input name="parameterId" type="text"/></li>
+                <li>Version ID: <input name="versionId" type="text"/></li>
+               <li>Project ID (optional): <input name="projectId" type="text"/></li>
+                <li>Location ID (optional): <input name="locationId" type="text"/></li>
+                <li><input type="submit" value="Delete Parameter Version"/></li>
+            </ol>
+        </form>
     </div>
 
     <div class="panel message-highlight" th:if="${message}">

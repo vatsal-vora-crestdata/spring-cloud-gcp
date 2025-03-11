@@ -86,4 +86,54 @@ public class ParameterManagerWebController {
     map.put("message", "Parameter created!");
     return new ModelAndView(INDEX_PAGE, map);
   }
+
+  @PostMapping("/deleteParameter")
+  public ModelAndView deleteParameter(
+      @RequestParam String parameterId,
+      @RequestParam(required = false) String projectId,
+      @RequestParam(required = false) String locationId,
+      ModelMap map) {
+    if (StringUtils.isEmpty(projectId)) {
+      if (StringUtils.isEmpty(locationId)) {
+        this.parameterManagerTemplate.deleteParameter(parameterId);
+      } else {
+        this.parameterManagerTemplate.deleteParameter(parameterId, locationId);
+      }
+    } else {
+      if (StringUtils.isEmpty(locationId)) {
+        this.parameterManagerTemplate.deleteParameter(parameterId, "global", projectId);
+      } else {
+        this.parameterManagerTemplate.deleteParameter(parameterId, locationId, projectId);
+      }
+    }
+
+    map.put("message", "Parameter deleted!");
+    return new ModelAndView(INDEX_PAGE, map);
+  }
+
+  @PostMapping("/deleteParameterVersion")
+  public ModelAndView deleteParameterVersion(
+      @RequestParam String parameterId,
+      @RequestParam String versionId,
+      @RequestParam(required = false) String projectId,
+      @RequestParam(required = false) String locationId,
+      ModelMap map) {
+    if (StringUtils.isEmpty(projectId)) {
+      if (StringUtils.isEmpty(locationId)) {
+        this.parameterManagerTemplate.deleteParameterVersion(parameterId, versionId);
+      } else {
+        this.parameterManagerTemplate.deleteParameterVersion(parameterId, versionId,locationId);
+      }
+    } else {
+      if (StringUtils.isEmpty(locationId)) {
+        this.parameterManagerTemplate.deleteParameterVersion(parameterId, versionId, "global", projectId);
+      } else {
+        this.parameterManagerTemplate.deleteParameterVersion(parameterId, versionId, locationId, projectId);
+      }
+    }
+
+    map.put("message", "Parameter Version deleted!");
+    return new ModelAndView(INDEX_PAGE, map);
+  }
+
 }
