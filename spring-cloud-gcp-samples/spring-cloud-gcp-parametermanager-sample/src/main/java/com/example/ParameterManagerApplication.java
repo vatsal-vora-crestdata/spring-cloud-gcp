@@ -14,21 +14,14 @@
  * limitations under the License.
  */
 
-package com.google.cloud.spring.parametermanager;
+package com.example;
 
-import java.util.Optional;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/** */
-public class ParameterManagerSyntaxUtils {
-  // Prefix for Google Cloud Parameter Manager resources.
-  private static final String PREFIX = "pm@";
-
-  public static Optional<String> getMatchedPrefixes(PrefixMatcher matcher) {
-    return Optional.of(PREFIX).filter(matcher::matches);
-  }
-
-  @FunctionalInterface
-  public interface PrefixMatcher {
-    boolean matches(String input);
+@SpringBootApplication
+public class ParameterManagerApplication {
+  public static void main(String[] args) {
+    SpringApplication.run(ParameterManagerApplication.class, args);
   }
 }
