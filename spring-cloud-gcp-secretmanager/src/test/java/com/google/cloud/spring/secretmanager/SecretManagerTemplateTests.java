@@ -81,7 +81,6 @@ class SecretManagerTemplateTests {
   @Test
   void testCreateSecretIfMissing_withProject() {
     when(this.client.getSecret(any(SecretName.class))).thenThrow(NotFoundException.class);
-
     this.secretManagerTemplate.createSecret(
         "my-secret", "hello world!".getBytes(), "custom-project");
 

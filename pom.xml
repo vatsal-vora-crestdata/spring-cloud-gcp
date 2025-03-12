@@ -405,6 +405,7 @@
 							<it.datastore>true</it.datastore>
 							<it.firestore>true</it.firestore>
 							<it.bigquery>true</it.bigquery>
+							<it.parametermanager>true</it.parametermanager>
 						</systemPropertyVariables>
 					</configuration>
 				</plugin>

@@ -134,6 +134,7 @@
 							</includes>
 							<systemPropertyVariables>
 								<it.logging>true</it.logging>
+								<it.parametermanager>true</it.parametermanager>
 								<it.pubsub>true</it.pubsub>
 								<it.pubsub-integration>true</it.pubsub-integration>
 								<it.pubsub-bus>true</it.pubsub-bus>

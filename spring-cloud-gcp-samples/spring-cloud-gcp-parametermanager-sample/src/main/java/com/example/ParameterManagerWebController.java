@@ -57,7 +57,7 @@ public class ParameterManagerWebController {
       }
     }
     parameterPayload = this.parameterManagerTemplate.getParameterString(parameterIdentifier);
-    return "Parameter ID: " + HtmlUtils.htmlEscape(parameterId) + " | Value: " + parameterPayload + "<br/><br/><a href='/'>Go back</a>";
+    return "Parameter Version ID: " + HtmlUtils.htmlEscape(versionId) + " | Value: " + parameterPayload + "<br/><br/><a href='/'>Go back</a>";
   }
 
   @PostMapping("/createParameter")

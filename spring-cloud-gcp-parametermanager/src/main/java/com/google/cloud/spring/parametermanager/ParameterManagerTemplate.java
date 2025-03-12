@@ -264,7 +264,7 @@ public class ParameterManagerTemplate implements ParameterManagerOperations {
   public void deleteParameter(String parameterId, String locationId, String projectId) {
     ParameterName parameterName = ParameterName.of(projectId, locationId, parameterId);
     DeleteParameterRequest request =
-        DeleteParameterRequest.newBuilder().setName(parameterName.toString()).build();
+          DeleteParameterRequest.newBuilder().setName(parameterName.toString()).build();
     this.parameterManagerClient.deleteParameter(request);
   }
 
@@ -301,10 +301,8 @@ public class ParameterManagerTemplate implements ParameterManagerOperations {
   @Override
   public boolean parameterExists(String parameterId, String locationId, String projectId) {
     ParameterName parameterName = ParameterName.of(projectId, locationId, parameterId);
-    GetParameterRequest request =
-        GetParameterRequest.newBuilder().setName(parameterName.toString()).build();
     try {
-      this.parameterManagerClient.getParameter(request);
+      this.parameterManagerClient.getParameter(parameterName);
     } catch (NotFoundException e) {
       return false;
     }
