@@ -1,6 +1,9 @@
 package com.example;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.google.cloud.spring.parametermanager.ParameterManagerTemplate;
+import java.util.UUID;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,11 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-
-import java.util.Collections;
-import java.util.UUID;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @EnabledIfSystemProperty(named = "it.parametermanager", matches = "true")
 @ExtendWith(SpringExtension.class)

@@ -53,7 +53,9 @@ public class ParameterManagerTemplateIntegrationTests {
         .atMost(Duration.ofSeconds(5))
         .untilAsserted(
             () -> {
-              String paramterString = parameterManagerTemplate.getParameterString("pm@" + parameterId + "/" + versionId);
+              String paramterString =
+                  parameterManagerTemplate.getParameterString(
+                      "pm@" + parameterId + "/" + versionId);
               assertThat(paramterString).isEqualTo("{'message': 'Hello World'}");
             });
   }
@@ -74,17 +76,23 @@ public class ParameterManagerTemplateIntegrationTests {
         .atMost(Duration.ofSeconds(5))
         .untilAsserted(
             () -> {
-              String paramterString = parameterManagerTemplate.getParameterString("pm@" + parameterId + "/" + versionId);
+              String paramterString =
+                  parameterManagerTemplate.getParameterString(
+                      "pm@" + parameterId + "/" + versionId);
               assertThat(paramterString).isEqualTo("{'message': 'Hello World'}");
 
-              byte[] parameterBytes = parameterManagerTemplate.getParameterBytes("pm@" + parameterId + "/" + versionId);
+              byte[] parameterBytes =
+                  parameterManagerTemplate.getParameterBytes("pm@" + parameterId + "/" + versionId);
               assertThat(parameterBytes).isEqualTo("{'message': 'Hello World'}".getBytes());
             });
   }
 
   @Test
   void testReadMissingParameter() {
-    assertThatThrownBy(() -> parameterManagerTemplate.getParameterString("pm@" + "test-NON-EXISTING-parameter" + "/" + versionId))
+    assertThatThrownBy(
+            () ->
+                parameterManagerTemplate.getParameterString(
+                    "pm@" + "test-NON-EXISTING-parameter" + "/" + versionId))
         .isInstanceOf(com.google.api.gax.rpc.NotFoundException.class);
   }
 
@@ -97,12 +105,14 @@ public class ParameterManagerTemplateIntegrationTests {
         .atMost(Duration.ofSeconds(10))
         .untilAsserted(
             () -> {
-
-              String paramterString = parameterManagerTemplate.getParameterString("pm@" + parameterId + "/" + newVersionId);
+              String paramterString =
+                  parameterManagerTemplate.getParameterString(
+                      "pm@" + parameterId + "/" + newVersionId);
               assertThat(paramterString).isEqualTo("{'message': 'Hello New World'}");
 
-              byte[] parameterBytes = parameterManagerTemplate.getParameterBytes(
-                  "pm@" + this.parameterId + "/" + newVersionId);
+              byte[] parameterBytes =
+                  parameterManagerTemplate.getParameterBytes(
+                      "pm@" + this.parameterId + "/" + newVersionId);
               assertThat(parameterBytes).isEqualTo("{'message': 'Hello New World'}".getBytes());
             });
   }

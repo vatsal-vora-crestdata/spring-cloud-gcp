@@ -58,7 +58,8 @@ public class ParameterManagerTemplate implements ParameterManagerOperations {
     this.allowDefaultParameterValue = false;
   }
 
-  public ParameterManagerTemplate setAllowDefaultParameterValue(boolean allowDefaultParameterValue) {
+  public ParameterManagerTemplate setAllowDefaultParameterValue(
+      boolean allowDefaultParameterValue) {
     this.allowDefaultParameterValue = allowDefaultParameterValue;
     return this;
   }
@@ -263,7 +264,7 @@ public class ParameterManagerTemplate implements ParameterManagerOperations {
   public void deleteParameter(String parameterId, String locationId, String projectId) {
     ParameterName parameterName = ParameterName.of(projectId, locationId, parameterId);
     DeleteParameterRequest request =
-          DeleteParameterRequest.newBuilder().setName(parameterName.toString()).build();
+        DeleteParameterRequest.newBuilder().setName(parameterName.toString()).build();
     this.parameterManagerClient.deleteParameter(request);
   }
 

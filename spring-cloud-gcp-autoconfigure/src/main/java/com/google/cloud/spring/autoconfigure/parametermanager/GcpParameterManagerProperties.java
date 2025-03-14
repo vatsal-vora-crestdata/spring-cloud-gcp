@@ -16,13 +16,13 @@
 
 package com.google.cloud.spring.autoconfigure.parametermanager;
 
+import static com.google.cloud.spring.autoconfigure.parametermanager.GcpParameterManagerProperties.PREFIX;
+
 import com.google.cloud.spring.core.Credentials;
 import com.google.cloud.spring.core.CredentialsSupplier;
 import com.google.cloud.spring.core.GcpScope;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
-
-import static com.google.cloud.spring.autoconfigure.parametermanager.GcpParameterManagerProperties.PREFIX;
 
 @ConfigurationProperties(PREFIX)
 public class GcpParameterManagerProperties implements CredentialsSupplier {

@@ -40,7 +40,12 @@ public class ParameterManagerWebController {
 
   @GetMapping("/getParameter")
   @ResponseBody
-  public String getParameter(@RequestParam String parameterId, @RequestParam String versionId, @RequestParam(required = false) String projectId, @RequestParam(required = false) String locationId, ModelMap map) {
+  public String getParameter(
+      @RequestParam String parameterId,
+      @RequestParam String versionId,
+      @RequestParam(required = false) String projectId,
+      @RequestParam(required = false) String locationId,
+      ModelMap map) {
     String parameterPayload;
     String parameterIdentifier;
     if (StringUtils.isEmpty(projectId)) {
@@ -53,11 +58,16 @@ public class ParameterManagerWebController {
       if (StringUtils.isEmpty(locationId)) {
         parameterIdentifier = "pm@" + projectId + "/" + parameterId + "/" + versionId;
       } else {
-        parameterIdentifier = "pm@" + projectId + "/" + locationId + "/" + parameterId + "/" + versionId;
+        parameterIdentifier =
+            "pm@" + projectId + "/" + locationId + "/" + parameterId + "/" + versionId;
       }
     }
     parameterPayload = this.parameterManagerTemplate.getParameterString(parameterIdentifier);
-    return "Parameter Version ID: " + HtmlUtils.htmlEscape(versionId) + " | Value: " + parameterPayload + "<br/><br/><a href='/'>Go back</a>";
+    return "Parameter Version ID: "
+        + HtmlUtils.htmlEscape(versionId)
+        + " | Value: "
+        + parameterPayload
+        + "<br/><br/><a href='/'>Go back</a>";
   }
 
   @PostMapping("/createParameter")
@@ -71,15 +81,19 @@ public class ParameterManagerWebController {
     ParameterFormat format = ParameterFormat.JSON;
     if (StringUtils.isEmpty(projectId)) {
       if (StringUtils.isEmpty(locationId)) {
-        this.parameterManagerTemplate.createParameter(parameterId, versionId, parameterPayload, format);
+        this.parameterManagerTemplate.createParameter(
+            parameterId, versionId, parameterPayload, format);
       } else {
-        this.parameterManagerTemplate.createParameter(parameterId, versionId, parameterPayload, format, locationId);
+        this.parameterManagerTemplate.createParameter(
+            parameterId, versionId, parameterPayload, format, locationId);
       }
     } else {
       if (StringUtils.isEmpty(locationId)) {
-        this.parameterManagerTemplate.createParameter(parameterId, versionId, parameterPayload, format, "global", projectId);
+        this.parameterManagerTemplate.createParameter(
+            parameterId, versionId, parameterPayload, format, "global", projectId);
       } else {
-        this.parameterManagerTemplate.createParameter(parameterId, versionId, parameterPayload, format, locationId, projectId);
+        this.parameterManagerTemplate.createParameter(
+            parameterId, versionId, parameterPayload, format, locationId, projectId);
       }
     }
 
@@ -122,18 +136,19 @@ public class ParameterManagerWebController {
       if (StringUtils.isEmpty(locationId)) {
         this.parameterManagerTemplate.deleteParameterVersion(parameterId, versionId);
       } else {
-        this.parameterManagerTemplate.deleteParameterVersion(parameterId, versionId,locationId);
+        this.parameterManagerTemplate.deleteParameterVersion(parameterId, versionId, locationId);
       }
     } else {
       if (StringUtils.isEmpty(locationId)) {
-        this.parameterManagerTemplate.deleteParameterVersion(parameterId, versionId, "global", projectId);
+        this.parameterManagerTemplate.deleteParameterVersion(
+            parameterId, versionId, "global", projectId);
       } else {
-        this.parameterManagerTemplate.deleteParameterVersion(parameterId, versionId, locationId, projectId);
+        this.parameterManagerTemplate.deleteParameterVersion(
+            parameterId, versionId, locationId, projectId);
       }
     }
 
     map.put("message", "Parameter Version deleted!");
     return new ModelAndView(INDEX_PAGE, map);
   }
-
 }
