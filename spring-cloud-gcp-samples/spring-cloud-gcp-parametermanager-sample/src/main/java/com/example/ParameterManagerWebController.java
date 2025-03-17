@@ -19,6 +19,7 @@ package com.example;
 import com.google.cloud.parametermanager.v1.ParameterFormat;
 import com.google.cloud.spring.parametermanager.ParameterManagerTemplate;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,12 +31,35 @@ import org.springframework.web.util.HtmlUtils;
 
 @Controller
 public class ParameterManagerWebController {
+
   private static final String INDEX_PAGE = "index.html";
+  private static final String APPLICATION_PARAMETER_FROM_VALUE = "applicationParameterFromValue";
 
   private final ParameterManagerTemplate parameterManagerTemplate;
+  // Application parameters can be accessed from the configuration properties class,
+  // parameter can be refreshed when decorated with @RefreshScope on the class
+  private final ParameterManagerConfiguration configuration;
 
-  public ParameterManagerWebController(ParameterManagerTemplate parameterManagerTemplate) {
+  @Value("${pm@application-fake/dev:DEFAULT}")
+  private String defaultParameter;
+
+  // Application parameters can be accessed using @Value syntax.
+  @Value("${pm@application-parameter/dev:DEFAULT}")
+  private String appParameterFromValue;
+
+  public ParameterManagerWebController(
+      ParameterManagerTemplate parameterManagerTemplate,
+      ParameterManagerConfiguration configuration) {
     this.parameterManagerTemplate = parameterManagerTemplate;
+    this.configuration = configuration;
+  }
+
+  @GetMapping("/")
+  public ModelAndView renderIndex(ModelMap map) {
+    map.put("applicationDefaultParameter", defaultParameter);
+    map.put(APPLICATION_PARAMETER_FROM_VALUE, appParameterFromValue);
+    map.put("applicationParameterFromConfigurationProperties", configuration.getParameter());
+    return new ModelAndView(INDEX_PAGE, map);
   }
 
   @GetMapping("/getParameter")
@@ -96,7 +120,7 @@ public class ParameterManagerWebController {
             parameterId, versionId, parameterPayload, format, locationId, projectId);
       }
     }
-
+    map.put(APPLICATION_PARAMETER_FROM_VALUE, this.appParameterFromValue);
     map.put("message", "Parameter created!");
     return new ModelAndView(INDEX_PAGE, map);
   }
@@ -121,6 +145,7 @@ public class ParameterManagerWebController {
       }
     }
 
+    map.put(APPLICATION_PARAMETER_FROM_VALUE, this.appParameterFromValue);
     map.put("message", "Parameter deleted!");
     return new ModelAndView(INDEX_PAGE, map);
   }

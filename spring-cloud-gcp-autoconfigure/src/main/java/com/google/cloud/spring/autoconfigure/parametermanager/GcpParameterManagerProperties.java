@@ -26,48 +26,42 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
 @ConfigurationProperties(PREFIX)
 public class GcpParameterManagerProperties implements CredentialsSupplier {
-    /**
-     * Configuration prefix for Parameter Manager properties.
-     */
-    public static final String PREFIX = "spring.cloud.gcp.parametermanager";
+  /** Configuration prefix for Parameter Manager properties. */
+  public static final String PREFIX = "spring.cloud.gcp.parametermanager";
 
-    /**
-     * Overrides the GCP OAuth2 credentials specified in the Core module.
-     */
-    @NestedConfigurationProperty
-    private final Credentials credentials = new Credentials(GcpScope.CLOUD_PLATFORM.getUrl());
+  /** Overrides the GCP OAuth2 credentials specified in the Core module. */
+  @NestedConfigurationProperty
+  private final Credentials credentials = new Credentials(GcpScope.CLOUD_PLATFORM.getUrl());
 
-    /**
-     * Overrides the GCP Project ID specified in the Core module.
-     */
-    private String projectId;
+  /** Overrides the GCP Project ID specified in the Core module. */
+  private String projectId;
 
-    /**
-     * Whether the parameter manager will allow a default parameter value when accessing a non-existing
-     * secret.
-     *
-     * <p>When set to false, the parameter manager will throw a {@link
-     * com.google.api.gax.rpc.NotFoundException}.
-     */
-    private boolean allowDefaultParameter;
+  /**
+   * Whether the parameter manager will allow a default parameter value when accessing a
+   * non-existing secret.
+   *
+   * <p>When set to false, the parameter manager will throw a {@link
+   * com.google.api.gax.rpc.NotFoundException}.
+   */
+  private boolean allowDefaultParameter;
 
-    public Credentials getCredentials() {
-        return credentials;
-    }
+  public Credentials getCredentials() {
+    return credentials;
+  }
 
-    public String getProjectId() {
-        return projectId;
-    }
+  public String getProjectId() {
+    return projectId;
+  }
 
-    public void setProjectId(String projectId) {
-        this.projectId = projectId;
-    }
+  public void setProjectId(String projectId) {
+    this.projectId = projectId;
+  }
 
-    public boolean isAllowDefaultParameter() {
-        return allowDefaultParameter;
-    }
+  public boolean isAllowDefaultParameter() {
+    return allowDefaultParameter;
+  }
 
-    public void setAllowDefaultParameter(boolean allowDefaultParameter) {
-        this.allowDefaultParameter = allowDefaultParameter;
-    }
+  public void setAllowDefaultParameter(boolean allowDefaultParameter) {
+    this.allowDefaultParameter = allowDefaultParameter;
+  }
 }

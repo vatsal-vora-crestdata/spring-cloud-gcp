@@ -40,6 +40,16 @@
 <h1>Parameter Manager Demo with Spring Cloud GCP</h1>
 
 <div class="panel">
+    <h3>Parameter Manager Property Source</h3>
+    At the bootstrap phase, we loaded the following parameter into the application context:
+    <br/>
+    <br/>
+    <b>Default Application parameter if not found :</b> <i>[[${applicationDefaultParameter}]]</i><br/>
+    <b>Application parameter from @Value:</b> <i>[[${applicationParameterFromValue}]]</i><br/>
+    <b>Application parameter form @ConfigurationProperties:</b> <i>[[${applicationParameterFromConfigurationProperties}]]</i>
+</div>
+
+<div class="panel">
     <h2>Create, Read, Update and Delete Parameters</h2>
 
     <p>

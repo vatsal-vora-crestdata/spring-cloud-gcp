@@ -30,11 +30,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
+/** Autoconfiguration for GCP Parameter Manager. */
 @AutoConfiguration
 @EnableConfigurationProperties(GcpParameterManagerProperties.class)
 @ConditionalOnClass(ParameterManagerTemplate.class)
 @ConditionalOnProperty(value = "spring.cloud.gcp.parametermanager.enabled", matchIfMissing = true)
 public class GcpParameterManagerAutoConfiguration {
+
   private final GcpProjectIdProvider gcpProjectIdProvider;
   private final GcpParameterManagerProperties properties;
   private final CredentialsProvider credentialsProvider;

@@ -22,13 +22,11 @@ import org.springframework.util.MultiValueMap;
 @EnabledIfSystemProperty(named = "it.parametermanager", matches = "true")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(
-  webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-  classes = ParameterManagerApplication.class
-)
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    classes = ParameterManagerApplication.class)
 public class ParameterManagerSampleTemplateIntegrationTests {
 
-  @Autowired
-  private ParameterManagerTemplate parameterManagerTemplate;
+  @Autowired private ParameterManagerTemplate parameterManagerTemplate;
 
   @Autowired private TestRestTemplate testRestTemplate;
 
@@ -39,7 +37,8 @@ public class ParameterManagerSampleTemplateIntegrationTests {
   void createParameter() {
     this.parameterName = String.format("sample-parameter-%s", UUID.randomUUID());
     this.versionName = String.format("sample-version-%s", UUID.randomUUID());
-    parameterManagerTemplate.createParameter(this.parameterName, this.versionName, "{'message': 'Hello World'}");
+    parameterManagerTemplate.createParameter(
+        this.parameterName, this.versionName, "{'message': 'Hello World'}");
   }
 
   @AfterEach
@@ -73,11 +72,15 @@ public class ParameterManagerSampleTemplateIntegrationTests {
 
   @Test
   void testReadParameterVersion() {
-    String getSecretUrl = String.format("/getParameter?parameterId=%s&versionId=%s", this.parameterName, this.versionName);
+    String getSecretUrl =
+        String.format(
+            "/getParameter?parameterId=%s&versionId=%s", this.parameterName, this.versionName);
     ResponseEntity<String> response =
         this.testRestTemplate.getForEntity(getSecretUrl, String.class);
     assertThat(response.getBody())
-        .contains(String.format("Parameter Version ID: %s | Value: {'message': 'Hello World'}", this.versionName));
+        .contains(
+            String.format(
+                "Parameter Version ID: %s | Value: {'message': 'Hello World'}", this.versionName));
   }
 
   @Test
