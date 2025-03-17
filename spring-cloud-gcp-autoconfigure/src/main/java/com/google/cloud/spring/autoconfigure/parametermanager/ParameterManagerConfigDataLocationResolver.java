@@ -38,7 +38,7 @@ import org.springframework.boot.context.config.ConfigDataResourceNotFoundExcepti
 public class ParameterManagerConfigDataLocationResolver
     implements ConfigDataLocationResolver<ParameterManagerConfigDataResource> {
 
-  /** ConfigData Prefix for Google Cloud Secret Manager. */
+  /** ConfigData Prefix for Google Cloud Parameter Manager. */
   public static final String PARAMETER_MANAGER_PREFIX = "pm@";
 
   /** A static client to avoid creating another client after refreshing. */

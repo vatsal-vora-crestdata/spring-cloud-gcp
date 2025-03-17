@@ -38,7 +38,7 @@ public class GcpParameterManagerProperties implements CredentialsSupplier {
 
   /**
    * Whether the parameter manager will allow a default parameter value when accessing a
-   * non-existing secret.
+   * non-existing parameter.
    *
    * <p>When set to false, the parameter manager will throw a {@link
    * com.google.api.gax.rpc.NotFoundException}.
