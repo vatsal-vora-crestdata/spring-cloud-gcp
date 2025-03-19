@@ -44,24 +44,15 @@ public class ParameterManagerPropertyUtils {
     String[] tokens = resourcePath.split("/");
 
     String projectId = projectIdProvider.getProjectId();
-    String locationId = "global";
+    String locationId = null;
     String parameterId = null;
     String versionId = null;
 
-    if (tokens.length == 2) {
-      // property is of the form "pm@<parameter-id>/<version-id>"
-      parameterId = tokens[0];
-      versionId = tokens[1];
-    } else if (tokens.length == 3) {
-      // property is of the form "pm@<project-id>/<parameter-id>/<version-id>"
-      projectId = tokens[0];
+    if (tokens.length == 3) {
+      // property is of the form "pm@<location-id>/<parameter-id>/<version-id>"
+      locationId = tokens[0];
       parameterId = tokens[1];
       versionId = tokens[2];
-    } else if (tokens.length == 4 && tokens[0].equals("locations")) {
-      // property is of the form "pm@locations/<location-id>/<parameter-id>/<version-id>"
-      locationId = tokens[1];
-      parameterId = tokens[2];
-      versionId = tokens[3];
     } else if (tokens.length == 4) {
       // property is of the form "pm@<project-id>/<location-id>/<parameter-id>/<version-id>"
       projectId = tokens[0];
@@ -75,15 +66,6 @@ public class ParameterManagerPropertyUtils {
       // property is of the form
       // "pm@locations/<location-id>/parameters/<parameter-id>/versions/<version-id>"
       locationId = tokens[1];
-      parameterId = tokens[3];
-      versionId = tokens[5];
-    } else if (tokens.length == 6
-        && tokens[0].equals("projects")
-        && tokens[2].equals("parameters")
-        && tokens[4].equals("versions")) {
-      // property is of the form
-      // "pm@projects/<project-id>/parameters/<parameter-id>/versions/<version-id>"
-      projectId = tokens[1];
       parameterId = tokens[3];
       versionId = tokens[5];
     } else if (tokens.length == 8

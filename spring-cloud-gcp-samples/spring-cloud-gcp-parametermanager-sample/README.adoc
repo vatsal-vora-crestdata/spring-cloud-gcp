@@ -9,7 +9,8 @@ image:http://gstatic.com/cloudssh/images/open-btn.svg[link=https://ssh.cloud.goo
 
 1. Create a Google Cloud project with https://cloud.google.com/billing/docs/how-to/modify-project#enable-billing[billing enabled], if you don't have one already.
 
-2. Enable the Parameter Manager API from the "APIs & Services" menu of the Google Cloud Console. This can be done using the gcloud command line tool:
+2. Enable the Parameter Manager API from the "APIs & Services" menu of the Google Cloud Console.
+This can be done using the gcloud command line tool:
 +
 [source]
 ----
@@ -24,7 +25,8 @@ b. https://cloud.google.com/iam/docs/creating-managing-service-accounts[Create a
 +
 Such as: `spring.cloud.gcp.parametermanager.credentials.location=file:/path/to/creds.json`
 
-4. Using the https://console.cloud.google.com/security/parametermanager/parameters[Parameter Manager UI in Cloud Console], create a new parameter named `application-parameter` and set it to any value. Instructions for using the Parameter Manager UI can be found in the https://cloud.google.com/secret-manager/parameter-manager/docs/create-parameter#gcloud[https://cloud.google.com/parameter-manager/docs/quickstart][Parameter Manager documentation].
+4. Using the https://console.cloud.google.com/security/parametermanager/parameters[Parameter Manager UI in Cloud Console], create a new parameter named `application-parameter` and set it to any value.
+Instructions for using the Parameter Manager UI can be found in the https://cloud.google.com/secret-manager/parameter-manager/docs/create-parameter#gcloud[https://cloud.google.com/parameter-manager/docs/quickstart][Parameter Manager documentation].
 
 5. Run `$ mvn clean install` from the root directory of the project.
 
@@ -37,7 +39,8 @@ Such as: `spring.cloud.gcp.parametermanager.credentials.location=file:/path/to/c
 applicationParameter: {"message": "Hello World from GCP PM!!"}
 ----
 +
-You will also see some web forms that allow you to create, read, and update parameters in Parameter Manager. This is done by using the `ParameterManagerTemplate`.
+You will also see some web forms that allow you to create, read, and update parameters in Parameter Manager.
+This is done by using the `ParameterManagerTemplate`.
 +
 Finally, you can view all of your parameters using the https://console.cloud.google.com/security/parametermanager/parameters[Parameter Manager Cloud Console UI], which is the source of truth for all of your parameters in Parameter Manager.
 
@@ -51,9 +54,11 @@ b. To refresh the parameter, send the following command to your server from whic
 ----
 curl -X POST http://localhost:8080/actuator/refresh
 ----
+
 Note that only `@ConfigurationProperties` annotated with `@RefreshScope` got the updated value.
 
 == What's Next
+
 Now that you've seen how to use Parameter Manager with Spring, you might want to explore more advanced use cases:
 
 1. Use Parameter Manager with Spring Cloud Config Server to centralize your configuration

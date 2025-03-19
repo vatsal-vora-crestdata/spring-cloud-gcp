@@ -38,20 +38,22 @@ public class ParameterManagerSampleTemplateIntegrationTests {
     this.parameterName = String.format("sample-parameter-%s", UUID.randomUUID());
     this.versionName = String.format("sample-version-%s", UUID.randomUUID());
     parameterManagerTemplate.createParameter(
-        this.parameterName, this.versionName, "{'message': 'Hello World'}");
+        "global", this.parameterName, this.versionName, "{'message': 'Hello World'}");
   }
 
   @AfterEach
   void deleteSecret() {
-    if (parameterManagerTemplate.parameterVersionExists(this.parameterName, "v1")) {
-      parameterManagerTemplate.deleteParameterVersion(this.parameterName, "v1");
+    if (parameterManagerTemplate.parameterVersionExists("global", this.parameterName, "v1")) {
+      parameterManagerTemplate.deleteParameterVersion("global", this.parameterName, "v1");
     }
 
-    if (parameterManagerTemplate.parameterVersionExists(this.parameterName, this.versionName)) {
-      parameterManagerTemplate.deleteParameterVersion(this.parameterName, this.versionName);
-      parameterManagerTemplate.deleteParameter(this.parameterName);
-    } else if (parameterManagerTemplate.parameterExists(this.parameterName)) {
-      parameterManagerTemplate.deleteParameter(this.parameterName);
+    if (parameterManagerTemplate.parameterVersionExists(
+        "global", this.parameterName, this.versionName)) {
+      parameterManagerTemplate.deleteParameterVersion(
+          "global", this.parameterName, this.versionName);
+      parameterManagerTemplate.deleteParameter("global", this.parameterName);
+    } else if (parameterManagerTemplate.parameterExists("global", this.parameterName)) {
+      parameterManagerTemplate.deleteParameter("global", this.parameterName);
     }
   }
 
@@ -61,7 +63,7 @@ public class ParameterManagerSampleTemplateIntegrationTests {
     params.add("parameterId", this.parameterName);
     params.add("versionId", "v1");
     params.add("projectId", "");
-    params.add("locationId", "");
+    params.add("locationId", "global");
     params.add("parameterPayload", "{'message': 'Hello World 2!'}");
     HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, new HttpHeaders());
 
@@ -74,7 +76,8 @@ public class ParameterManagerSampleTemplateIntegrationTests {
   void testReadParameterVersion() {
     String getSecretUrl =
         String.format(
-            "/getParameter?parameterId=%s&versionId=%s", this.parameterName, this.versionName);
+            "/getParameter?locationId=%s&parameterId=%s&versionId=%s",
+            "global", this.parameterName, this.versionName);
     ResponseEntity<String> response =
         this.testRestTemplate.getForEntity(getSecretUrl, String.class);
     assertThat(response.getBody())
@@ -89,7 +92,7 @@ public class ParameterManagerSampleTemplateIntegrationTests {
     params.add("parameterId", this.parameterName);
     params.add("versionId", this.versionName);
     params.add("projectId", "");
-    params.add("locationId", "");
+    params.add("locationId", "global");
     HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, new HttpHeaders());
 
     ResponseEntity<String> response =
@@ -99,11 +102,11 @@ public class ParameterManagerSampleTemplateIntegrationTests {
 
   @Test
   void testDeleteParameter() {
-    parameterManagerTemplate.deleteParameterVersion(this.parameterName, this.versionName);
+    parameterManagerTemplate.deleteParameterVersion("global", this.parameterName, this.versionName);
     MultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
     params.add("parameterId", this.parameterName);
     params.add("projectId", "");
-    params.add("locationId", "");
+    params.add("locationId", "global");
     HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<>(params, new HttpHeaders());
 
     ResponseEntity<String> response =

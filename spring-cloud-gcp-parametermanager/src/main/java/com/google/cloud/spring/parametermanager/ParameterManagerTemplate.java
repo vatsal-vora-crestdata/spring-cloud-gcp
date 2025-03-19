@@ -69,144 +69,104 @@ public class ParameterManagerTemplate implements ParameterManagerOperations {
   }
 
   @Override
-  public void createParameter(String parameterId, String versionId, String payload) {
+  public void createParameter(
+      String locationId, String parameterId, String versionId, String payload) {
     createNewParameterVersion(
+        projectIdProvider.getProjectId(),
+        locationId,
         parameterId,
         versionId,
         ByteString.copyFromUtf8(payload),
-        ParameterFormat.UNFORMATTED,
-        projectIdProvider.getProjectId(),
-        "global");
+        ParameterFormat.UNFORMATTED);
   }
 
   @Override
   public void createParameter(
-      String parameterId, String versionId, String payload, ParameterFormat format) {
+      String projectId, String locationId, String parameterId, String versionId, String payload) {
     createNewParameterVersion(
-        parameterId,
-        versionId,
-        ByteString.copyFromUtf8(payload),
-        format,
-        projectIdProvider.getProjectId(),
-        "global");
-  }
-
-  @Override
-  public void createParameter(
-      String parameterId, String versionId, String payload, String locationId) {
-    createNewParameterVersion(
-        parameterId,
-        versionId,
-        ByteString.copyFromUtf8(payload),
-        ParameterFormat.UNFORMATTED,
-        projectIdProvider.getProjectId(),
-        locationId);
-  }
-
-  @Override
-  public void createParameter(
-      String parameterId, String versionId, String payload, String locationId, String projectId) {
-    createNewParameterVersion(
-        parameterId,
-        versionId,
-        ByteString.copyFromUtf8(payload),
-        ParameterFormat.UNFORMATTED,
         projectId,
-        locationId);
-  }
-
-  @Override
-  public void createParameter(
-      String parameterId,
-      String versionId,
-      String payload,
-      ParameterFormat format,
-      String locationId) {
-    createNewParameterVersion(
+        locationId,
         parameterId,
         versionId,
         ByteString.copyFromUtf8(payload),
-        format,
-        projectIdProvider.getProjectId(),
-        locationId);
+        ParameterFormat.UNFORMATTED);
   }
 
   @Override
   public void createParameter(
+      String locationId, String parameterId, String versionId, String payload, ParameterFormat format) {
+    createNewParameterVersion(
+        projectIdProvider.getProjectId(),
+        locationId,
+        parameterId,
+        versionId,
+        ByteString.copyFromUtf8(payload),
+        format);
+  }
+
+  @Override
+  public void createParameter(
+      String projectId,
+      String locationId,
       String parameterId,
       String versionId,
       String payload,
-      ParameterFormat format,
+      ParameterFormat format
+      ) {
+    createNewParameterVersion(
+        projectId, locationId, parameterId, versionId, ByteString.copyFromUtf8(payload), format);
+  }
+
+  @Override
+  public void createParameter(
+      String locationId, String parameterId, String versionId, byte[] payload) {
+    createNewParameterVersion(
+        projectIdProvider.getProjectId(),
+        locationId,
+        parameterId,
+        versionId,
+        ByteString.copyFrom(payload),
+        ParameterFormat.UNFORMATTED);
+  }
+
+  @Override
+  public void createParameter(
       String locationId,
-      String projectId) {
-    createNewParameterVersion(
-        parameterId, versionId, ByteString.copyFromUtf8(payload), format, projectId, locationId);
-  }
-
-  @Override
-  public void createParameter(String parameterId, String versionId, byte[] payload) {
-    createNewParameterVersion(
-        parameterId,
-        versionId,
-        ByteString.copyFrom(payload),
-        ParameterFormat.UNFORMATTED,
-        projectIdProvider.getProjectId(),
-        "global");
-  }
-
-  @Override
-  public void createParameter(
-      String parameterId, String versionId, byte[] payload, ParameterFormat format) {
-    createNewParameterVersion(
-        parameterId,
-        versionId,
-        ByteString.copyFrom(payload),
-        format,
-        projectIdProvider.getProjectId(),
-        "global");
-  }
-
-  @Override
-  public void createParameter(
       String parameterId,
       String versionId,
       byte[] payload,
-      ParameterFormat format,
-      String locationId) {
+      ParameterFormat format
+      ) {
     createNewParameterVersion(
+        projectIdProvider.getProjectId(),
+        locationId,
         parameterId,
         versionId,
         ByteString.copyFrom(payload),
-        format,
-        projectIdProvider.getProjectId(),
-        locationId);
+        format);
   }
 
   @Override
   public void createParameter(
+      String projectId,
+      String locationId,
       String parameterId,
       String versionId,
       byte[] payload,
-      ParameterFormat format,
-      String locationId,
-      String projectId) {
+      ParameterFormat format
+      ) {
     createNewParameterVersion(
-        parameterId, versionId, ByteString.copyFrom(payload), format, projectId, locationId);
+        projectId, locationId, parameterId, versionId, ByteString.copyFrom(payload), format);
   }
 
   @Override
-  public void enableParameterVersion(String parameterId, String versionId) {
-    enableParameterVersion(parameterId, versionId, "global", projectIdProvider.getProjectId());
-  }
-
-  @Override
-  public void enableParameterVersion(String parameterId, String versionId, String locationId) {
-    enableParameterVersion(parameterId, versionId, locationId, projectIdProvider.getProjectId());
+  public void enableParameterVersion(String locationId, String parameterId, String versionId) {
+    enableParameterVersion(projectIdProvider.getProjectId(), locationId, parameterId, versionId);
   }
 
   @Override
   public void enableParameterVersion(
-      String parameterId, String versionId, String locationId, String projectId) {
+      String projectId, String locationId, String parameterId, String versionId) {
     ParameterVersionName parameterVersionName =
         ParameterVersionName.of(projectId, locationId, parameterId, versionId);
     ParameterVersion parameterVersion =
@@ -223,18 +183,13 @@ public class ParameterManagerTemplate implements ParameterManagerOperations {
   }
 
   @Override
-  public void disableParameterVersion(String parameterId, String versionId) {
-    disableParameterVersion(parameterId, versionId, "global", projectIdProvider.getProjectId());
-  }
-
-  @Override
-  public void disableParameterVersion(String parameterId, String versionId, String locationId) {
-    disableParameterVersion(parameterId, versionId, locationId, projectIdProvider.getProjectId());
+  public void disableParameterVersion(String locationId, String parameterId, String versionId) {
+    disableParameterVersion(projectIdProvider.getProjectId(), locationId, parameterId, versionId);
   }
 
   @Override
   public void disableParameterVersion(
-      String parameterId, String versionId, String locationId, String projectId) {
+      String projectId, String locationId, String parameterId, String versionId) {
     ParameterVersionName parameterVersionName =
         ParameterVersionName.of(projectId, locationId, parameterId, versionId);
     ParameterVersion parameterVersion =
@@ -251,17 +206,12 @@ public class ParameterManagerTemplate implements ParameterManagerOperations {
   }
 
   @Override
-  public void deleteParameter(String parameterId) {
-    deleteParameter(parameterId, "global", projectIdProvider.getProjectId());
+  public void deleteParameter(String locationId, String parameterId) {
+    deleteParameter(projectIdProvider.getProjectId(), locationId, parameterId);
   }
 
   @Override
-  public void deleteParameter(String parameterId, String locationId) {
-    deleteParameter(parameterId, locationId, projectIdProvider.getProjectId());
-  }
-
-  @Override
-  public void deleteParameter(String parameterId, String locationId, String projectId) {
+  public void deleteParameter(String projectId, String locationId, String parameterId) {
     ParameterName parameterName = ParameterName.of(projectId, locationId, parameterId);
     DeleteParameterRequest request =
         DeleteParameterRequest.newBuilder().setName(parameterName.toString()).build();
@@ -269,18 +219,13 @@ public class ParameterManagerTemplate implements ParameterManagerOperations {
   }
 
   @Override
-  public void deleteParameterVersion(String parameterId, String versionId) {
-    deleteParameterVersion(parameterId, versionId, "global", projectIdProvider.getProjectId());
-  }
-
-  @Override
-  public void deleteParameterVersion(String parameterId, String versionId, String locationId) {
-    deleteParameterVersion(parameterId, versionId, locationId, projectIdProvider.getProjectId());
+  public void deleteParameterVersion(String locationId, String parameterId, String versionId) {
+    deleteParameterVersion(projectIdProvider.getProjectId(), locationId, parameterId, versionId);
   }
 
   @Override
   public void deleteParameterVersion(
-      String parameterId, String versionId, String locationId, String projectId) {
+      String projectId, String locationId, String parameterId, String versionId) {
     ParameterVersionName parameterVersionName =
         ParameterVersionName.of(projectId, locationId, parameterId, versionId);
     DeleteParameterVersionRequest request =
@@ -289,17 +234,12 @@ public class ParameterManagerTemplate implements ParameterManagerOperations {
   }
 
   @Override
-  public boolean parameterExists(String parameterId) {
-    return parameterExists(parameterId, "global", projectIdProvider.getProjectId());
+  public boolean parameterExists(String locationId, String parameterId) {
+    return parameterExists(projectIdProvider.getProjectId(), locationId, parameterId);
   }
 
   @Override
-  public boolean parameterExists(String parameterId, String locationId) {
-    return parameterExists(parameterId, locationId, projectIdProvider.getProjectId());
-  }
-
-  @Override
-  public boolean parameterExists(String parameterId, String locationId, String projectId) {
+  public boolean parameterExists(String projectId, String locationId, String parameterId) {
     ParameterName parameterName = ParameterName.of(projectId, locationId, parameterId);
     try {
       this.parameterManagerClient.getParameter(parameterName);
@@ -310,20 +250,14 @@ public class ParameterManagerTemplate implements ParameterManagerOperations {
   }
 
   @Override
-  public boolean parameterVersionExists(String parameterId, String versionId) {
+  public boolean parameterVersionExists(String locationId, String parameterId, String versionId) {
     return parameterVersionExists(
-        parameterId, versionId, "global", projectIdProvider.getProjectId());
-  }
-
-  @Override
-  public boolean parameterVersionExists(String parameterId, String versionId, String locationId) {
-    return parameterVersionExists(
-        parameterId, versionId, locationId, projectIdProvider.getProjectId());
+        projectIdProvider.getProjectId(), locationId, parameterId, versionId);
   }
 
   @Override
   public boolean parameterVersionExists(
-      String parameterId, String versionId, String locationId, String projectId) {
+      String projectId, String locationId, String parameterId, String versionId) {
     ParameterVersionName parameterVersionName =
         ParameterVersionName.of(projectId, locationId, parameterId, versionId);
     GetParameterVersionRequest request =
@@ -420,14 +354,14 @@ public class ParameterManagerTemplate implements ParameterManagerOperations {
    * {@code parameterId}.
    */
   private void createNewParameterVersion(
+      String projectId,
+      String locationId,
       String parameterId,
       String versionId,
       ByteString payload,
-      ParameterFormat format,
-      String projectId,
-      String locationId) {
-    if (!parameterExists(parameterId, locationId, projectId)) {
-      createParameterInternal(parameterId, format, projectId, locationId);
+      ParameterFormat format) {
+    if (!parameterExists(projectId, locationId, parameterId)) {
+      createParameterInternal(projectId, locationId, parameterId, format);
     }
 
     ParameterName parameterName = ParameterName.of(projectId, locationId, parameterId);
@@ -451,7 +385,7 @@ public class ParameterManagerTemplate implements ParameterManagerOperations {
    * must create versions of the parameter which stores the payload of the parameter.
    */
   private void createParameterInternal(
-      String parameterId, ParameterFormat format, String projectId, String locationId) {
+      String projectId, String locationId, String parameterId, ParameterFormat format) {
     LocationName locationName = LocationName.of(projectId, locationId);
 
     Parameter parameter = Parameter.newBuilder().setFormat(format).build();

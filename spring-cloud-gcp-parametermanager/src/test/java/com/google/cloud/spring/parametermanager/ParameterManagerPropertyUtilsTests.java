@@ -37,8 +37,21 @@ class ParameterManagerPropertyUtilsTests {
   }
 
   @Test
-  void testInvalidParameterFormat_missingParameterId() {
+  void testInvalidParameterFormat_missingLocationId() {
     String property = "pm@";
+
+    assertThatThrownBy(
+        () ->
+            ParameterManagerPropertyUtils.getParameterVersionName(
+                property, DEFAULT_PROJECT_ID_PROVIDER))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining(
+            "Unrecognized format for specifying a GCP Parameter Manager parameter:");
+  }
+
+  @Test
+  void testInvalidParameterFormat_missingParameterId() {
+    String property = "pm@global/ / ";
 
     assertThatThrownBy(
             () ->
@@ -46,12 +59,12 @@ class ParameterManagerPropertyUtilsTests {
                     property, DEFAULT_PROJECT_ID_PROVIDER))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining(
-            "Unrecognized format for specifying a GCP Parameter Manager parameter:");
+            "The GCP Parameter Manager parameter id must not be empty:");
   }
 
   @Test
   void testInvalidParameterFormat_missingVersionId() {
-    String property = "pm@the-parameter/ ";
+    String property = "pm@global/the-parameter/ ";
 
     assertThatThrownBy(
             () ->
@@ -62,29 +75,16 @@ class ParameterManagerPropertyUtilsTests {
   }
 
   @Test
-  void testShortProperty_parameterVersionId() {
-    String property = "pm@the-parameter/the-version";
+  void testShortProperty_locationParameterVersionId() {
+    String property = "pm@my-location/the-parameter/v3";
     ParameterVersionName parameterIdentifier =
         ParameterManagerPropertyUtils.getParameterVersionName(
             property, DEFAULT_PROJECT_ID_PROVIDER);
 
     assertThat(parameterIdentifier.getProject()).isEqualTo("defaultProject");
-    assertThat(parameterIdentifier.getLocation()).isEqualTo("global");
+    assertThat(parameterIdentifier.getLocation()).isEqualTo("my-location");
     assertThat(parameterIdentifier.getParameter()).isEqualTo("the-parameter");
-    assertThat(parameterIdentifier.getParameterVersion()).isEqualTo("the-version");
-  }
-
-  @Test
-  void testShortProperty_projectParameterVersionId() {
-    String property = "pm@my-project/the-parameter/v1";
-    ParameterVersionName parameterIdentifier =
-        ParameterManagerPropertyUtils.getParameterVersionName(
-            property, DEFAULT_PROJECT_ID_PROVIDER);
-
-    assertThat(parameterIdentifier.getProject()).isEqualTo("my-project");
-    assertThat(parameterIdentifier.getLocation()).isEqualTo("global");
-    assertThat(parameterIdentifier.getParameter()).isEqualTo("the-parameter");
-    assertThat(parameterIdentifier.getParameterVersion()).isEqualTo("v1");
+    assertThat(parameterIdentifier.getParameterVersion()).isEqualTo("v3");
   }
 
   @Test
@@ -98,32 +98,6 @@ class ParameterManagerPropertyUtilsTests {
     assertThat(parameterIdentifier.getLocation()).isEqualTo("my-location");
     assertThat(parameterIdentifier.getParameter()).isEqualTo("the-parameter");
     assertThat(parameterIdentifier.getParameterVersion()).isEqualTo("v2");
-  }
-
-  @Test
-  void testShortProperty_locationParameterVersionId() {
-    String property = "pm@locations/my-location/the-parameter/v3";
-    ParameterVersionName parameterIdentifier =
-        ParameterManagerPropertyUtils.getParameterVersionName(
-            property, DEFAULT_PROJECT_ID_PROVIDER);
-
-    assertThat(parameterIdentifier.getProject()).isEqualTo("defaultProject");
-    assertThat(parameterIdentifier.getLocation()).isEqualTo("my-location");
-    assertThat(parameterIdentifier.getParameter()).isEqualTo("the-parameter");
-    assertThat(parameterIdentifier.getParameterVersion()).isEqualTo("v3");
-  }
-
-  @Test
-  void testLongProperty_projectParameterVersionId() {
-    String property = "pm@projects/my-project/parameters/the-parameter/versions/v1";
-    ParameterVersionName parameterIdentifier =
-        ParameterManagerPropertyUtils.getParameterVersionName(
-            property, DEFAULT_PROJECT_ID_PROVIDER);
-
-    assertThat(parameterIdentifier.getProject()).isEqualTo("my-project");
-    assertThat(parameterIdentifier.getLocation()).isEqualTo("global");
-    assertThat(parameterIdentifier.getParameter()).isEqualTo("the-parameter");
-    assertThat(parameterIdentifier.getParameterVersion()).isEqualTo("v1");
   }
 
   @Test

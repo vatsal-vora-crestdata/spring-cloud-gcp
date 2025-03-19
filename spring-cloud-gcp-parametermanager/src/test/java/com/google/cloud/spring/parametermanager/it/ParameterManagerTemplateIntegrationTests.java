@@ -48,26 +48,26 @@ public class ParameterManagerTemplateIntegrationTests {
     this.parameterId = String.format("test-parameter-%s", UUID.randomUUID());
     this.versionId = String.format("test-version-%s", UUID.randomUUID());
 
-    parameterManagerTemplate.createParameter(parameterId, versionId, "{'message': 'Hello World'}");
+    parameterManagerTemplate.createParameter("global", parameterId, versionId, "{'message': 'Hello World'}");
     await()
         .atMost(Duration.ofSeconds(5))
         .untilAsserted(
             () -> {
               String paramterString =
                   parameterManagerTemplate.getParameterString(
-                      "pm@" + parameterId + "/" + versionId);
+                      "pm@global/" + parameterId + "/" + versionId);
               assertThat(paramterString).isEqualTo("{'message': 'Hello World'}");
             });
   }
 
   @AfterEach
   void deleteParameter() {
-    if (parameterManagerTemplate.parameterVersionExists(this.parameterId, "v1")) {
-      parameterManagerTemplate.deleteParameterVersion(this.parameterId, "v1");
+    if (parameterManagerTemplate.parameterVersionExists("global", this.parameterId, "v1")) {
+      parameterManagerTemplate.deleteParameterVersion("global", this.parameterId, "v1");
     }
 
-    parameterManagerTemplate.deleteParameterVersion(parameterId, versionId);
-    parameterManagerTemplate.deleteParameter(parameterId);
+    parameterManagerTemplate.deleteParameterVersion("global", parameterId, versionId);
+    parameterManagerTemplate.deleteParameter("global", parameterId);
   }
 
   @Test
@@ -78,11 +78,11 @@ public class ParameterManagerTemplateIntegrationTests {
             () -> {
               String paramterString =
                   parameterManagerTemplate.getParameterString(
-                      "pm@" + parameterId + "/" + versionId);
+                      "pm@global/" + parameterId + "/" + versionId);
               assertThat(paramterString).isEqualTo("{'message': 'Hello World'}");
 
               byte[] parameterBytes =
-                  parameterManagerTemplate.getParameterBytes("pm@" + parameterId + "/" + versionId);
+                  parameterManagerTemplate.getParameterBytes("pm@global/" + parameterId + "/" + versionId);
               assertThat(parameterBytes).isEqualTo("{'message': 'Hello World'}".getBytes());
             });
   }
@@ -92,7 +92,7 @@ public class ParameterManagerTemplateIntegrationTests {
     assertThatThrownBy(
             () ->
                 parameterManagerTemplate.getParameterString(
-                    "pm@" + "test-NON-EXISTING-parameter" + "/" + versionId))
+                    "pm@global/" + "test-NON-EXISTING-parameter" + "/" + versionId))
         .isInstanceOf(com.google.api.gax.rpc.NotFoundException.class);
   }
 
@@ -100,19 +100,19 @@ public class ParameterManagerTemplateIntegrationTests {
   void testUpdateParameter() {
     String newVersionId = "v1";
     parameterManagerTemplate.createParameter(
-        this.parameterId, newVersionId, "{'message': 'Hello New World'}");
+        "global", this.parameterId, newVersionId, "{'message': 'Hello New World'}");
     await()
         .atMost(Duration.ofSeconds(10))
         .untilAsserted(
             () -> {
               String paramterString =
                   parameterManagerTemplate.getParameterString(
-                      "pm@" + parameterId + "/" + newVersionId);
+                      "pm@global/" + parameterId + "/" + newVersionId);
               assertThat(paramterString).isEqualTo("{'message': 'Hello New World'}");
 
               byte[] parameterBytes =
                   parameterManagerTemplate.getParameterBytes(
-                      "pm@" + this.parameterId + "/" + newVersionId);
+                      "pm@global/" + this.parameterId + "/" + newVersionId);
               assertThat(parameterBytes).isEqualTo("{'message': 'Hello New World'}".getBytes());
             });
   }

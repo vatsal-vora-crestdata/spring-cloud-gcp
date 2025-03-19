@@ -65,8 +65,9 @@ class ParameterManagerCompatibilityTests {
                     ParameterManagerClient.class, InstanceSupplier.of(client)));
     try (ConfigurableApplicationContext applicationContext = application.run()) {
       ConfigurableEnvironment environment = applicationContext.getEnvironment();
-      assertThat(environment.getProperty("pm@my-param/v1")).isEqualTo("new Parameter Version");
-      assertThatThrownBy(() -> environment.getProperty("pm@fake-param/v1"))
+      assertThat(environment.getProperty("pm@global/my-param/v1"))
+          .isEqualTo("new Parameter Version");
+      assertThatThrownBy(() -> environment.getProperty("pm@global/fake-param/v1"))
           .isExactlyInstanceOf(NotFoundException.class);
     }
   }
@@ -83,8 +84,9 @@ class ParameterManagerCompatibilityTests {
                     ParameterManagerClient.class, InstanceSupplier.of(client)));
     try (ConfigurableApplicationContext applicationContext = application.run()) {
       ConfigurableEnvironment environment = applicationContext.getEnvironment();
-      assertThat(environment.getProperty("pm@my-param/v1")).isEqualTo("new Parameter Version");
-      assertThat(environment.getProperty("pm@fake-param/v1")).isNull();
+      assertThat(environment.getProperty("pm@global/my-param/v1"))
+          .isEqualTo("new Parameter Version");
+      assertThat(environment.getProperty("pm@global/fake-param/v1")).isNull();
     }
   }
 }

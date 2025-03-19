@@ -40,11 +40,11 @@ public class ParameterManagerWebController {
   // parameter can be refreshed when decorated with @RefreshScope on the class
   private final ParameterManagerConfiguration configuration;
 
-  @Value("${pm@application-fake/dev:DEFAULT}")
+  @Value("${pm@global/application-fake/dev:DEFAULT}")
   private String defaultParameter;
 
   // Application parameters can be accessed using @Value syntax.
-  @Value("${pm@application-parameter/dev:DEFAULT}")
+  @Value("${pm@global/application-parameter/dev:DEFAULT}")
   private String appParameterFromValue;
 
   public ParameterManagerWebController(
@@ -65,26 +65,18 @@ public class ParameterManagerWebController {
   @GetMapping("/getParameter")
   @ResponseBody
   public String getParameter(
+      @RequestParam String locationId,
       @RequestParam String parameterId,
       @RequestParam String versionId,
       @RequestParam(required = false) String projectId,
-      @RequestParam(required = false) String locationId,
       ModelMap map) {
     String parameterPayload;
     String parameterIdentifier;
     if (StringUtils.isEmpty(projectId)) {
-      if (StringUtils.isEmpty(locationId)) {
-        parameterIdentifier = "pm@" + parameterId + "/" + versionId;
-      } else {
-        parameterIdentifier = "pm@locations/" + locationId + "/" + parameterId + "/" + versionId;
-      }
+      parameterIdentifier = "pm@" + locationId + "/" + parameterId + "/" + versionId;
     } else {
-      if (StringUtils.isEmpty(locationId)) {
-        parameterIdentifier = "pm@" + projectId + "/" + parameterId + "/" + versionId;
-      } else {
-        parameterIdentifier =
-            "pm@" + projectId + "/" + locationId + "/" + parameterId + "/" + versionId;
-      }
+      parameterIdentifier =
+          "pm@" + projectId + "/" + locationId + "/" + parameterId + "/" + versionId;
     }
     parameterPayload = this.parameterManagerTemplate.getParameterString(parameterIdentifier);
     return "Parameter Version ID: "
@@ -96,29 +88,19 @@ public class ParameterManagerWebController {
 
   @PostMapping("/createParameter")
   public ModelAndView createParameter(
+      @RequestParam String locationId,
       @RequestParam String parameterId,
       @RequestParam String versionId,
       @RequestParam String parameterPayload,
       @RequestParam(required = false) String projectId,
-      @RequestParam(required = false) String locationId,
       ModelMap map) {
     ParameterFormat format = ParameterFormat.JSON;
     if (StringUtils.isEmpty(projectId)) {
-      if (StringUtils.isEmpty(locationId)) {
-        this.parameterManagerTemplate.createParameter(
-            parameterId, versionId, parameterPayload, format);
-      } else {
-        this.parameterManagerTemplate.createParameter(
-            parameterId, versionId, parameterPayload, format, locationId);
-      }
+      this.parameterManagerTemplate.createParameter(
+          locationId, parameterId, versionId, parameterPayload, format);
     } else {
-      if (StringUtils.isEmpty(locationId)) {
-        this.parameterManagerTemplate.createParameter(
-            parameterId, versionId, parameterPayload, format, "global", projectId);
-      } else {
-        this.parameterManagerTemplate.createParameter(
-            parameterId, versionId, parameterPayload, format, locationId, projectId);
-      }
+      this.parameterManagerTemplate.createParameter(
+          projectId, locationId, parameterId, versionId, parameterPayload, format);
     }
     map.put(APPLICATION_PARAMETER_FROM_VALUE, this.appParameterFromValue);
     map.put("message", "Parameter created!");
@@ -127,22 +109,14 @@ public class ParameterManagerWebController {
 
   @PostMapping("/deleteParameter")
   public ModelAndView deleteParameter(
+      @RequestParam String locationId,
       @RequestParam String parameterId,
       @RequestParam(required = false) String projectId,
-      @RequestParam(required = false) String locationId,
       ModelMap map) {
     if (StringUtils.isEmpty(projectId)) {
-      if (StringUtils.isEmpty(locationId)) {
-        this.parameterManagerTemplate.deleteParameter(parameterId);
-      } else {
-        this.parameterManagerTemplate.deleteParameter(parameterId, locationId);
-      }
+      this.parameterManagerTemplate.deleteParameter(locationId, parameterId);
     } else {
-      if (StringUtils.isEmpty(locationId)) {
-        this.parameterManagerTemplate.deleteParameter(parameterId, "global", projectId);
-      } else {
-        this.parameterManagerTemplate.deleteParameter(parameterId, locationId, projectId);
-      }
+      this.parameterManagerTemplate.deleteParameter(projectId, locationId, parameterId);
     }
 
     map.put(APPLICATION_PARAMETER_FROM_VALUE, this.appParameterFromValue);
@@ -152,25 +126,16 @@ public class ParameterManagerWebController {
 
   @PostMapping("/deleteParameterVersion")
   public ModelAndView deleteParameterVersion(
+      @RequestParam String locationId,
       @RequestParam String parameterId,
       @RequestParam String versionId,
       @RequestParam(required = false) String projectId,
-      @RequestParam(required = false) String locationId,
       ModelMap map) {
     if (StringUtils.isEmpty(projectId)) {
-      if (StringUtils.isEmpty(locationId)) {
-        this.parameterManagerTemplate.deleteParameterVersion(parameterId, versionId);
-      } else {
-        this.parameterManagerTemplate.deleteParameterVersion(parameterId, versionId, locationId);
-      }
+      this.parameterManagerTemplate.deleteParameterVersion(locationId, parameterId, versionId);
     } else {
-      if (StringUtils.isEmpty(locationId)) {
-        this.parameterManagerTemplate.deleteParameterVersion(
-            parameterId, versionId, "global", projectId);
-      } else {
-        this.parameterManagerTemplate.deleteParameterVersion(
-            parameterId, versionId, locationId, projectId);
-      }
+      this.parameterManagerTemplate.deleteParameterVersion(
+          projectId, locationId, parameterId, versionId);
     }
 
     map.put("message", "Parameter Version deleted!");

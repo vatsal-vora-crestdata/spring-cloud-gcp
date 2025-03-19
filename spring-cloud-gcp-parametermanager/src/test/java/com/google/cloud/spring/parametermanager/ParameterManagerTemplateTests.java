@@ -76,7 +76,7 @@ class ParameterManagerTemplateTests {
     when(this.client.getParameter(any(ParameterName.class))).thenThrow(NotFoundException.class);
 
     this.parameterManagerTemplate.createParameter(
-        parameterId, versionId, payload, ParameterFormat.JSON);
+        "global", parameterId, versionId, payload, ParameterFormat.JSON);
 
     verifyCreateParameterRequest(parameterId, ParameterFormat.JSON, "my-project", "global");
 
@@ -92,7 +92,7 @@ class ParameterManagerTemplateTests {
 
     when(this.client.getParameter(any(ParameterName.class))).thenThrow(NotFoundException.class);
     this.parameterManagerTemplate.createParameter(
-        parameterId, versionId, payload, ParameterFormat.JSON, "custom-location");
+        "custom-location", parameterId, versionId, payload, ParameterFormat.JSON);
     verifyCreateParameterRequest(
         parameterId, ParameterFormat.JSON, "my-project", "custom-location");
     verifyCreateParameterVersionRequest(
@@ -108,7 +108,7 @@ class ParameterManagerTemplateTests {
     when(this.client.getParameter(any(ParameterName.class))).thenThrow(NotFoundException.class);
 
     this.parameterManagerTemplate.createParameter(
-        parameterId, versionId, payload, ParameterFormat.JSON, "custom-location", "custom-project");
+        "custom-project", "custom-location", parameterId, versionId, payload, ParameterFormat.JSON);
     verifyCreateParameterRequest(
         parameterId, ParameterFormat.JSON, "custom-project", "custom-location");
 
@@ -132,7 +132,7 @@ class ParameterManagerTemplateTests {
 
     // Verify that the parameter is not created.
     this.parameterManagerTemplate.createParameter(
-        parameterId, versionId, payload, ParameterFormat.JSON);
+        "global", parameterId, versionId, payload, ParameterFormat.JSON);
     verify(this.client).getParameter(ParameterName.of("my-project", "global", parameterId));
     verify(this.client, never()).createParameter(any());
     verifyCreateParameterVersionRequest(
@@ -151,7 +151,7 @@ class ParameterManagerTemplateTests {
 
     // Verify that the parameter is not created.
     this.parameterManagerTemplate.createParameter(
-        parameterId, versionId, payload, ParameterFormat.JSON, "my-location");
+        "my-location", parameterId, versionId, payload, ParameterFormat.JSON);
     verify(this.client).getParameter(ParameterName.of("my-project", "my-location", parameterId));
     verify(this.client, never()).createParameter(any());
     verifyCreateParameterVersionRequest(
@@ -171,7 +171,7 @@ class ParameterManagerTemplateTests {
 
     // Verify that the parameter is not created.
     this.parameterManagerTemplate.createParameter(
-        parameterId, versionId, payload, ParameterFormat.JSON, "custom-location", "custom-project");
+        "custom-project", "custom-location", parameterId, versionId, payload, ParameterFormat.JSON);
     verify(this.client)
         .getParameter(ParameterName.of("custom-project", "custom-location", parameterId));
     verify(this.client, never()).createParameter(any());
@@ -192,7 +192,7 @@ class ParameterManagerTemplateTests {
     when(this.client.getParameter(any(ParameterName.class))).thenThrow(NotFoundException.class);
 
     this.parameterManagerTemplate.createParameter(
-        parameterId, versionId, payload.getBytes(), ParameterFormat.JSON);
+        "global", parameterId, versionId, payload.getBytes(), ParameterFormat.JSON);
 
     verifyCreateParameterRequest(parameterId, ParameterFormat.JSON, "my-project", "global");
 
@@ -208,7 +208,7 @@ class ParameterManagerTemplateTests {
 
     when(this.client.getParameter(any(ParameterName.class))).thenThrow(NotFoundException.class);
     this.parameterManagerTemplate.createParameter(
-        parameterId, versionId, payload.getBytes(), ParameterFormat.JSON, "custom-location");
+        "custom-location", parameterId, versionId, payload.getBytes(), ParameterFormat.JSON);
     verifyCreateParameterRequest(
         parameterId, ParameterFormat.JSON, "my-project", "custom-location");
     verifyCreateParameterVersionRequest(
@@ -224,12 +224,12 @@ class ParameterManagerTemplateTests {
     when(this.client.getParameter(any(ParameterName.class))).thenThrow(NotFoundException.class);
 
     this.parameterManagerTemplate.createParameter(
+        "custom-project",
+        "custom-location",
         parameterId,
         versionId,
         payload.getBytes(),
-        ParameterFormat.JSON,
-        "custom-location",
-        "custom-project");
+        ParameterFormat.JSON);
     verifyCreateParameterRequest(
         parameterId, ParameterFormat.JSON, "custom-project", "custom-location");
 
@@ -253,7 +253,7 @@ class ParameterManagerTemplateTests {
 
     // Verify that the parameter is not created.
     this.parameterManagerTemplate.createParameter(
-        parameterId, versionId, payload.getBytes(), ParameterFormat.JSON);
+        "global", parameterId, versionId, payload.getBytes(), ParameterFormat.JSON);
     verify(this.client).getParameter(ParameterName.of("my-project", "global", parameterId));
     verify(this.client, never()).createParameter(any());
     verifyCreateParameterVersionRequest(
@@ -272,7 +272,7 @@ class ParameterManagerTemplateTests {
 
     // Verify that the parameter is not created.
     this.parameterManagerTemplate.createParameter(
-        parameterId, versionId, payload.getBytes(), ParameterFormat.JSON, "my-location");
+        "my-location", parameterId, versionId, payload.getBytes(), ParameterFormat.JSON);
     verify(this.client).getParameter(ParameterName.of("my-project", "my-location", parameterId));
     verify(this.client, never()).createParameter(any());
     verifyCreateParameterVersionRequest(
@@ -292,12 +292,13 @@ class ParameterManagerTemplateTests {
 
     // Verify that the parameter is not created.
     this.parameterManagerTemplate.createParameter(
+        "custom-project",
+        "custom-location",
         parameterId,
         versionId,
         payload.getBytes(),
-        ParameterFormat.JSON,
-        "custom-location",
-        "custom-project");
+        ParameterFormat.JSON
+        );
     verify(this.client)
         .getParameter(ParameterName.of("custom-project", "custom-location", parameterId));
     verify(this.client, never()).createParameter(any());
@@ -326,7 +327,7 @@ class ParameterManagerTemplateTests {
         .thenReturn(parameterVersion);
 
     String result =
-        this.parameterManagerTemplate.getParameterString("pm@" + parameterId + "/" + versionId);
+        this.parameterManagerTemplate.getParameterString("pm@global/" + parameterId + "/" + versionId);
     verify(this.client).getParameterVersion(any(ParameterVersionName.class));
     assertThat(result).isEqualTo(expectedValue);
   }
@@ -348,7 +349,7 @@ class ParameterManagerTemplateTests {
         .thenReturn(parameterVersion);
 
     byte[] result =
-        this.parameterManagerTemplate.getParameterBytes("pm@" + parameterId + "/" + versionId);
+        this.parameterManagerTemplate.getParameterBytes("pm@global/" + parameterId + "/" + versionId);
     verify(this.client).getParameterVersion(any(ParameterVersionName.class));
     assertThat(result).isEqualTo(expectedValue.getBytes());
   }
@@ -358,7 +359,7 @@ class ParameterManagerTemplateTests {
     when(this.client.getParameterVersion(any(ParameterVersionName.class)))
         .thenThrow(NotFoundException.class);
     assertThatThrownBy(
-            () -> this.parameterManagerTemplate.getParameterString("pm@fake-parameter/v1"))
+            () -> this.parameterManagerTemplate.getParameterString("pm@global/fake-parameter/v1"))
         .isExactlyInstanceOf(NotFoundException.class);
   }
 
@@ -368,7 +369,7 @@ class ParameterManagerTemplateTests {
         .thenThrow(NotFoundException.class);
 
     this.parameterManagerTemplate.setAllowDefaultParameterValue(true);
-    String result = this.parameterManagerTemplate.getParameterString("pm@fake-parameter/v1");
+    String result = this.parameterManagerTemplate.getParameterString("pm@global/fake-parameter/v1");
     assertThat(result).isNull();
   }
 
@@ -376,13 +377,10 @@ class ParameterManagerTemplateTests {
   void testDeleteParameter() {
     String parameterId = "my-parameter";
 
-    this.parameterManagerTemplate.deleteParameter(parameterId);
-    verifyDeleteParameterRequest(parameterId, "my-project", "global");
-
-    this.parameterManagerTemplate.deleteParameter(parameterId, "my-location");
+    this.parameterManagerTemplate.deleteParameter("my-location", parameterId);
     verifyDeleteParameterRequest(parameterId, "my-project", "my-location");
 
-    this.parameterManagerTemplate.deleteParameter(parameterId, "custom-location", "custom-project");
+    this.parameterManagerTemplate.deleteParameter("custom-project", "custom-location", parameterId);
     verifyDeleteParameterRequest(parameterId, "custom-project", "custom-location");
   }
 
@@ -391,14 +389,11 @@ class ParameterManagerTemplateTests {
     String parameterId = "my-parameter";
     String versionId = "v1";
 
-    this.parameterManagerTemplate.deleteParameterVersion(parameterId, versionId);
-    verifyDeleteParameterVersionRequest(parameterId, versionId, "my-project", "global");
-
-    this.parameterManagerTemplate.deleteParameterVersion(parameterId, versionId, "my-location");
+    this.parameterManagerTemplate.deleteParameterVersion("my-location", parameterId, versionId);
     verifyDeleteParameterVersionRequest(parameterId, versionId, "my-project", "my-location");
 
     this.parameterManagerTemplate.deleteParameterVersion(
-        parameterId, versionId, "custom-location", "custom-project");
+        "custom-project", "custom-location", parameterId, versionId);
     verifyDeleteParameterVersionRequest(
         parameterId, versionId, "custom-project", "custom-location");
   }
@@ -408,16 +403,12 @@ class ParameterManagerTemplateTests {
     String parameterId = "my-parameter";
     String versionId = "v1";
 
-    this.parameterManagerTemplate.enableParameterVersion(parameterId, versionId);
-    verifyEnableDisableParameterVersionRequest(
-        parameterId, versionId, "my-project", "global", false);
-
-    this.parameterManagerTemplate.enableParameterVersion(parameterId, versionId, "custom-location");
+    this.parameterManagerTemplate.enableParameterVersion("custom-location", parameterId, versionId);
     verifyEnableDisableParameterVersionRequest(
         parameterId, versionId, "my-project", "custom-location", false);
 
     this.parameterManagerTemplate.enableParameterVersion(
-        parameterId, versionId, "custom-location", "custom-project");
+        "custom-project", "custom-location", parameterId, versionId);
     verifyEnableDisableParameterVersionRequest(
         parameterId, versionId, "custom-project", "custom-location", false);
   }
@@ -427,17 +418,17 @@ class ParameterManagerTemplateTests {
     String parameterId = "my-parameter";
     String versionId = "v1";
 
-    this.parameterManagerTemplate.disableParameterVersion(parameterId, versionId);
+    this.parameterManagerTemplate.disableParameterVersion("global", parameterId, versionId);
     verifyEnableDisableParameterVersionRequest(
         parameterId, versionId, "my-project", "global", true);
 
     this.parameterManagerTemplate.disableParameterVersion(
-        parameterId, versionId, "custom-location");
+        "custom-location", parameterId, versionId);
     verifyEnableDisableParameterVersionRequest(
         parameterId, versionId, "my-project", "custom-location", true);
 
     this.parameterManagerTemplate.disableParameterVersion(
-        parameterId, versionId, "custom-location", "custom-project");
+        "custom-project", "custom-location", parameterId, versionId);
     verifyEnableDisableParameterVersionRequest(
         parameterId, versionId, "custom-project", "custom-location", true);
   }

@@ -22,9 +22,7 @@ import org.springframework.boot.env.EnvironmentPostProcessor;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.env.ConfigurableEnvironment;
 
-/**
- * Registers converters used by Spring Cloud GCP Parameter Manager.
- */
+/** Registers converters used by Spring Cloud GCP Parameter Manager. */
 public class GcpParameterManagerEnvironmentPostProcessor implements EnvironmentPostProcessor {
 
   @Override
